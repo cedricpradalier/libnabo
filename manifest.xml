@@ -9,7 +9,7 @@
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/libnabo</url>
   <export>
-      <cpp cflags="-I${prefix}/nabo" lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib -lnabo"/>
+      <cpp cflags="-I${prefix}" lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib -lnabo"/>
   </export>
 
 </package>

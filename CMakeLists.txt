@@ -62,7 +62,7 @@ find_path(EIGEN_INCLUDE_DIR Eigen/Core
 include_directories(${EIGEN_INCLUDE_DIR} ${Boost_INCLUDE_DIRS})
 
 # main nabo lib
-rosbuild_add_library(${PROJECT_NAME} 
+rosbuild_add_library(nabo
 	nabo/nabo.cpp
 	nabo/brute_force_cpu.cpp
 	nabo/kdtree_cpu.cpp

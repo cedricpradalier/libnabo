@@ -270,6 +270,7 @@ namespace Nabo
 		buildPoints.clear();
 	}
 	
+	
 	template<typename T, typename Heap>
 	unsigned long KDTreeUnbalancedPtInLeavesImplicitBoundsStackOpt<T, Heap>::knn(const Matrix& query, IndexMatrix& indices, Matrix& dists2, const Index k, const T epsilon, const unsigned optionFlags, const T maxRadius) const
 	{
@@ -290,6 +291,7 @@ namespace Nabo
 		unsigned long leafTouchedCount(0);
 		for (int i = 0; i < colCount; ++i)
 		{
+            NearestNeighbourSearch<T>::setQueryIndex(i);
 			leafTouchedCount += onePointKnn(query, indices, dists2, i, heap, off, maxError2, maxRadius2, allowSelfMatch, collectStatistics, sortResults);
 		}
 		return leafTouchedCount;
@@ -314,6 +316,7 @@ namespace Nabo
 		unsigned long leafTouchedCount(0);
 		for (int i = 0; i < colCount; ++i)
 		{
+            NearestNeighbourSearch<T>::setQueryIndex(i);
 			const T maxRadius(maxRadii[i]);
 			const T maxRadius2(maxRadius * maxRadius);
 			leafTouchedCount += onePointKnn(query, indices, dists2, i, heap, off, maxError2, maxRadius2, allowSelfMatch, collectStatistics, sortResults);
@@ -377,7 +380,8 @@ namespace Nabo
 				}
 				if ((dist <= maxRadius2) &&
 					(dist < heap.headValue()) &&
-					(allowSelfMatch || (dist > numeric_limits<T>::epsilon()))
+					(allowSelfMatch || (dist > numeric_limits<T>::epsilon())) && 
+                    NearestNeighbourSearch<T>::acceptPoint(bucket->index)
 				)
 					heap.replaceHead(bucket->index, dist);
 				++bucket;

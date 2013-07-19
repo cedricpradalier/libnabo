@@ -45,6 +45,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace Nabo
 {
+
 	//! balanced-tree implementation of heap
 	/** It uses a binary heap, which provides replacement in O(log(n)),
 	 * 	however the constant overhead is significative. */
@@ -88,6 +89,11 @@ namespace Nabo
 		{
 			data.reserve(size);
 		}
+
+        inline size_t size() const {
+            return nbNeighbours;
+        }
+
 		
 		//! reset to the empty heap
 		inline void reset()
@@ -163,7 +169,7 @@ namespace Nabo
 		}
 #endif
 	};
-	
+
 #if 0
 	//! brute-force implementation of heap
 	/** It uses a vector and linear search, which provides replacement in O(n),
@@ -298,6 +304,11 @@ namespace Nabo
 		sizeMinusOne(data.size() - 1)
 		{
 		}
+
+        inline size_t size() const {
+            return data.size();
+        }
+
 		
 		//! reset to the empty heap
 		inline void reset()
@@ -361,6 +372,7 @@ namespace Nabo
 		}
 #endif
 	};
+
 }
 
 #endif // __INDEX_HEAP_H

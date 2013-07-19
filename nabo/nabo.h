@@ -42,6 +42,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <vector>
 #include <map>
 #include <boost/any.hpp>
+#include <boost/shared_ptr.hpp>
 
 /*! 
 	\file nabo.h
@@ -239,6 +240,13 @@ namespace Nabo
 				return defaultValue;
 		}
 	};
+
+    struct PointFilter {
+        virtual ~PointFilter() {}
+
+        virtual void setQueryIndex(int i_query) = 0;
+        virtual bool acceptPoint(int i_cloud) const = 0;
+    };
 	
 	//! Nearest neighbour search interface, templatized on scalar type
 	template<typename T>
@@ -265,6 +273,8 @@ namespace Nabo
 		const Vector minBound;
 		//! the high bound of the search space (axis-aligned bounding box)
 		const Vector maxBound;
+
+        mutable boost::shared_ptr<PointFilter> filter;
 		
 		//! type of search
 		enum SearchType
@@ -367,6 +377,8 @@ namespace Nabo
 		
 		//! virtual destructor
 		virtual ~NearestNeighbourSearch() {}
+
+        void setFilter(boost::shared_ptr<PointFilter> f) {filter = f;}
 		
 	protected:
 		//! constructor
@@ -379,6 +391,18 @@ namespace Nabo
 		 *	\param dists2 squared distances to nearest neighbours, must be of size k x query.cols() 
 			\param maxRadii if non 0, maximum radii, must be of size k */
 		void checkSizesKnn(const Matrix& query, const IndexMatrix& indices, const Matrix& dists2, const Index k, const Vector* maxRadii = 0) const;
+
+        bool acceptPoint(int i) const {
+            if (!filter) return true;
+            return filter->acceptPoint(i);
+        }
+
+        // Const, because only modifying the filter eventually, which is
+        // mutable
+        void setQueryIndex(int i) const {
+            if (!filter) return;
+            filter->setQueryIndex(i);
+        }
 	};
 	
 	// Convenience typedefs

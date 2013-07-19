@@ -84,12 +84,14 @@ namespace Nabo
 			const T maxRadius2(maxRadius * maxRadius);
 			const Vector& q(query.block(0,c,dim,1));
 			heap.reset();
+            NearestNeighbourSearch<T>::setQueryIndex(c);
 			for (int i = 0; i < this->cloud.cols(); ++i)
 			{
 				const T dist(dist2<T>(this->cloud.block(0,i,dim,1), q));
 				if ((dist <= maxRadius2) &&
 					(dist < heap.headValue()) &&
-					(allowSelfMatch || (dist > numeric_limits<T>::epsilon())))
+					(allowSelfMatch || (dist > numeric_limits<T>::epsilon())) && 
+                    NearestNeighbourSearch<T>::acceptPoint(i))
 					heap.replaceHead(i, dist);
 			}
 			if (sortResults)
