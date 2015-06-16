@@ -127,7 +127,7 @@ else()
         nabo/kdtree_opencl.cpp
     )
 
-    # add_subdirectory(examples)
+    add_subdirectory(examples)
     # add_subdirectory(tests)
     # add_subdirectory(python)
     install(TARGETS nabo
